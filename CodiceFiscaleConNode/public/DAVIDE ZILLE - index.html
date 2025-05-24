@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <title>Calcolatore di Codice Fiscale [ZILLE]</title>
+    <script src="JQuery.js"></script>
+    <script src="DAVIDE ZILLE - codice.js"></script>
+    <style>
+        .interactable{
+            scale: 1;
+            outline: none;
+        }
+        label {
+            position: relative;
+            margin-top: 3vh;
+            left: 3vw;
+            font-size: 1.2vw;
+            border-radius: .3vw;
+            height: 6.25vh;
+            width: 6vw;
+            padding-left: 2vw;
+            padding-right: 2vw;
+            display: inline-flex;/*Serve perchè senno non userebbe la width e heigth custom*/
+            justify-content: center; /* centra orizzontalmente */
+            vertical-align: middle; /* centra verticalmente */
+            align-items: center;/* centra verticalmente */  /*Vanno messi entrambi, non ho idea del perchè*/
+            text-align: center;/* centra orizzontalmente la data di nascita, che era off-settata, per qualche motivo*/
+        }
+
+        input {
+            margin-top: 3vh;
+            position: relative;
+            border-radius: .4vw;
+            width: 6vw;
+            height: 5vh;
+            left: 4vw;
+            font-size: 1vw;
+            vertical-align: middle;/*Serve perchè sennò non sono verticalmente centrati con le label*/
+        }
+        input[type='text']{/* serve solo sugli input type text*/
+            padding-left: 1vw;
+        }
+
+        select {
+            margin-top: 3vh;
+            position: relative;
+            border-radius: .4vw;
+            width: 6vw;
+            height: 5vh;
+            left: 4vw;
+            font-size: 1vw;
+            vertical-align: middle;
+        }
+        img{
+            margin-top: 3vh;
+            position: absolute;
+            right: 3vw;
+            width: 3vw;
+            height: 3vw;
+        }
+        p{
+            border-radius: 2vw;
+            height: 3vh;
+            display: inline-flex;/*serve per centrarli bene*/
+            width: 12vw;
+            justify-content: center; /* centra orizzontalmente */
+            align-items: center;/* centra verticalmente */
+            font-size: 1vw;
+        }
+    </style>
+</head>
+
+<body style="overflow-y: hidden;">
+    <div style="display: flex;">
+        <div style="border-radius: 1vw;width: 60vw;height: 50vh;position: absolute; left: 7.5vw;top:15vh;" data-colorSelector="pane">
+            <label id="input1" class="interactable" data-colorSelector="label">Nome</label>
+            <input id="Name" type="text" class="interactable" placeholder="Inserisci il tuo nome qui" value="" style="width:40%;" data-colorSelector="input">
+            <img src="imgs/StatusIcon.png" class="interactable" style="rotate: 180deg;scale: 1;" class="StatusIcon" id="icon1">
+    
+            <br>
+            <label id="input2" class="interactable" data-colorSelector="label">Cognome</label>
+            <input id="Surname" class="interactable" placeholder="Inserisci il tuo cognome qui" type="text" value="" style="width:40%;" data-colorSelector="input">
+            <img src="imgs/StatusIcon.png" class="interactable" style="rotate: 180deg;scale: 1;" class="StatusIcon" id="icon2">
+    
+            <br>
+            <label id="input3" class="interactable" data-colorSelector="label">Sesso</label>
+            <input id="Male" style="margin-right: .5vw;" class="interactable" type="button" name="Sex" value="Maschio" onclick="setSex(true);" data-colorSelector="input">
+            <input id="Female" style="margin-right: .5vw;" class="interactable" type="button" name="Sex" value="Femmina" onclick="setSex(false);" data-colorSelector="input">
+            <img src="imgs/StatusIcon.png" class="interactable" style="rotate: 180deg;scale: 1;" class="StatusIcon" id="icon3">
+    
+            <br>
+            <label id="input4" class="interactable" data-colorSelector="label">Data di nascita</label>
+            <select class="interactable" style="margin-right: .5vw;" id="DaySelector" data-colorSelector="input"></select>
+            <select class="interactable" style="margin-right: .5vw;" id="MonthSelector" data-colorSelector="input"></select>
+            <select class="interactable" style="margin-right: .5vw;" id="YearSelector" data-colorSelector="input"></select>
+            <img src="imgs/StatusIcon.png" class="interactable" style="rotate: 180deg;scale: 1;" class="StatusIcon" id="icon4">
+    
+            <br>
+            <label id="input5" class="interactable" data-colorSelector="label">Comune</label>
+            <input type="text" placeholder="Cerca comune/città..." class="interactable" value="" id="BirthPlaceSearch" style="width: 15vw;" data-colorSelector="input"> 
+            <select id="BirthPlaceSelector" class="interactable" style="width: 20vw;" data-colorSelector="input"></select>
+            <img src="imgs/StatusIcon.png" class="interactable" style="rotate: 180deg;scale: 1;" class="StatusIcon" id="icon5">
+        </div>
+
+        <div style="border-radius: 1vw;width: 20vw;height: 50vh;position: absolute; right: 7.5vw;top:15vh;" data-colorSelector="pane"> 
+            <label class="interactable" style="width: 10vw;height: 7vh;position: absolute;top: -1.5vh;" data-colorSelector="label">Codici calcolati in passato</label>
+            <div class="interactable" data-colorSelector="pane2" style="border-radius: 1vw;position: absolute;width: 16vw; height: 30vh;top:10vh;left: 2vw;   ;overflow: auto;text-align: center;" id="history" data-colorSelector="pane2">
+            <!--Qui compaiono i codici salvati nei cookies-->
+            </div>
+            <div style="display: flex;position: absolute;bottom: 2.5vh;" data-colorSelector="pane2" onclick="clearHistory();">
+                <input type="button" class="interactable" id="deleteHistoryButton" data-colorSelector="input"  value="Cancella Dati" style="position: absolute;width: 8vw;top: -8vh;left: 7.5vw;scale: 1;">
+                <img src="imgs/trashBin.png" class="interactable" style="position: absolute;top: -8.75vh;left: 3.5vw;">
+            </div>
+        </div>
+    </div>
+
+    <div style="border-radius: 1vw;width: 12vw;height: 13vh;position: absolute; left: 31.5vw;top:70vh;visibility: visible;" data-colorSelector="pane" id="OutputBar">
+        <label style="position:absolute;scale: 1;left: 12vw;width: 0vw; height:3vh;padding: 1vw;border-radius: 1vw;" data-colorSelector="label" id="Output"></label>
+        <img src="imgs/calcola.png" class="interactable" onclick="check()" style="left: 2vw;" id="CalcolaIcon">
+        <img src="imgs/refresh.png" class="interactable" onclick="refreshAll()" style="left: 6.5vw;" id="PulisciIcon">
+        <br><!--il display flex serve perchè mi servivano più elementi allo stesso livello di y nello schermo-->
+        <div style="display: flex; gap: 2vw;position: absolute;left: 2.25vw;bottom: 2vh;" ><!--li ho centrati a mano, non sapevo come fare...-->
+            <div data-colorSelector="text">Calcola</div><div data-colorSelector="text">Pulisci</div>
+        </div>
+    </div>
+
+    <div style="border-radius: 1vw;width: 16vw;height: 12vh;position: absolute; right: 10vw;top:70vh;visibility: visible;" data-colorSelector="pane">
+        <label style="position:absolute;border-radius: 1vw;height: 5vh;width: 10vw;padding: .5vh;left: 1vw;" data-colorSelector="label" class="interactable">Tema della pagina</label>
+        <img src="imgs/LightMode.png" style="right: 1vw;border-radius: 1vh;" data-colorSelector="input" class="interactable" onclick="changeTheme();" id="ThemeButton">
+    </div>
+
+
+    <div id="CookiesPopUpWindow" style="position: absolute;background-color: rgba(0, 0, 0, .5);width: 99vw;height: 99vh;top: -100vh;"><!--Sfondo trasparente nero (99 perchè sennò appaiono le barre di scorrimento laterali)-->
+        <div data-colorSelector="pane" id="CookiesPopUp" style="position:absolute ;width: 40vw;height: 60vh;left: 29.5vw;top: 200vh;border-radius: 2vw;">
+            <div data-colorSelector="pane2" style="position:absolute ;width: 37vw;height: 55vh;left: 1.5vw;top: 2.5vh;border-radius: 2vw;">
+                <img class="interactable" src="imgs/NotificationIcon.png" style="position: absolute; left: 1vw;">
+                <img class="interactable" src="imgs/CookieIcon.png" style="position: absolute; right: 1vw;">
+                <h1 data-colorSelector="text" style="position: absolute;top: 1.5vh; left: 4.5vw">Questo sito fa utilizzo di Cookies!</h1>
+                <p data-colorSelector="text" style="position: absolute;left: 5vw;top: 23vh; width: 28vw;font-size: 1.1vw;">
+                    Avviso importante! Questo sito web utilizza i cookie per garantire il suo corretto funzionamento e per offrire un'esperienza ottimale agli utenti.<br><br>
+                    Si segnala che alcune funzionalità del sito potrebbero risultare disabilitate o il sito stesso potrebbe non funzionare<br>
+                    correttamente qualora non vengano concessi i permessi necessari per l'utilizzo di alcuni cookie.<br><br>
+                    È importante notare che per il corretto funzionamento delle funzionalità essenziali del sito, alcuni cookie non possono essere disattivati, in conformità con le disposizioni della legge europea sui cookie (EU Cookies Law).
+                </p>
+                <div class="interactable" style="position: absolute;bottom: 5vh;display: flex;width: 12vw;height: 8vh;border-radius: 1vw;bottom: 2vh;left: 4vw;" data-colorSelector="input" onclick="CookiesRequestResponse(true);">
+                    <div style="display: flex;"><p data-colorSelector="text" style="position: absolute;left: -2vw;font-size: 1.2vw;">Consenti</p> <img style="position: absolute;left: 7.5vw;top: -2vh;" src="imgs/HappyIcon.png" data-colorSelector="icon"></div>
+                </div>
+                <div class="interactable" style="position: absolute;bottom: 5vh;display: flex;width: 12vw;height: 8vh;border-radius: 1vw;bottom: 2vh;right: 4vw;" data-colorSelector="input" onclick="CookiesRequestResponse(false);">
+                    <div style="display: flex;"><p data-colorSelector="text" style="position: absolute;left: -2vw;font-size: 1.2vw;">Rifiuta</p> <img style="position: absolute;left: 7.5vw;top: -2vh;" src="imgs/SadIcon.png" data-colorSelector="icon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
